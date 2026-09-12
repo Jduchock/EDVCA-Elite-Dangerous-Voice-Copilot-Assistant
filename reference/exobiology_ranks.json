@@ -1,0 +1,101 @@
+{
+  "career": "Exobiologist",
+  "basis": "Lifetime total profit from selling organic data to Vista Genomics",
+  "currency": "credits",
+  "source": "Elite Dangerous Fandom wiki rank table, supplied by John",
+  "captured": "2026-09",
+  "journal_event": "SellOrganicData",
+  "ranks": [
+    {
+      "tier": 0,
+      "rank": "Directionless",
+      "profit_required": 0,
+      "cosmetic": "Artemis Suit Body Suit Livery (Vibrant Green)"
+    },
+    {
+      "tier": 1,
+      "rank": "Mostly Directionless",
+      "profit_required": 22500000,
+      "cosmetic": "Artemis Suit Torso, Arms, and Legs Livery (Vibrant Green)"
+    },
+    {
+      "tier": 2,
+      "rank": "Compiler",
+      "profit_required": 83475000,
+      "cosmetic": "Artemis Suit Helmet Livery (Vibrant Green)"
+    },
+    {
+      "tier": 3,
+      "rank": "Collector",
+      "profit_required": 210560000,
+      "cosmetic": "Artemis Suit Body Suit Livery (Vibrant Blue)"
+    },
+    {
+      "tier": 4,
+      "rank": "Cataloguer",
+      "profit_required": 532800000,
+      "cosmetic": "Artemis Suit Torso, Arms, and Legs Livery (Vibrant Blue)"
+    },
+    {
+      "tier": 5,
+      "rank": "Taxonomist",
+      "profit_required": 1144000000,
+      "cosmetic": "Artemis Suit Helmet Livery (Vibrant Blue)"
+    },
+    {
+      "tier": 6,
+      "rank": "Ecologist",
+      "profit_required": 2262600000,
+      "cosmetic": "Artemis Suit Body Suit Livery (Vibrant Red)"
+    },
+    {
+      "tier": 7,
+      "rank": "Geneticist",
+      "profit_required": 3996000000,
+      "cosmetic": "Artemis Suit Torso, Arms, and Legs Livery (Vibrant Red)"
+    },
+    {
+      "tier": 8,
+      "rank": "Elite",
+      "profit_required": 8425000000,
+      "cosmetic": "Artemis Suit Helmet Livery (Vibrant Red)"
+    },
+    {
+      "tier": 9,
+      "rank": "Elite I",
+      "profit_required": 12969000000,
+      "cosmetic": null
+    },
+    {
+      "tier": 10,
+      "rank": "Elite II",
+      "profit_required": 17425000000,
+      "cosmetic": null
+    },
+    {
+      "tier": 11,
+      "rank": "Elite III",
+      "profit_required": 21925000000,
+      "cosmetic": null
+    },
+    {
+      "tier": 12,
+      "rank": "Elite IV",
+      "profit_required": 26320000000,
+      "cosmetic": null,
+      "note": "Community-observed range 26,316,968,829 to 26,321,968,829."
+    },
+    {
+      "tier": 13,
+      "rank": "Elite V",
+      "profit_required": 30553600000,
+      "cosmetic": null,
+      "note": "Listed figure may be out of date. Commanders report the real threshold between 30,909,860,900 and 30,925,860,900 - about 30,917,860,900 give or take 8 million, as of July 3311."
+    }
+  ],
+  "extras": {
+    "first_logged_bonus": "A sample never turned in before pays 5x the base value in total: the base value plus a bonus of 4x the base. In a SellOrganicData journal event this is the Value field plus the Bonus field. Already-logged samples pay base only.",
+    "sampling_tool": "Genetic Sampler on the Artemis Suit; three samples of a species are needed for a complete set.",
+    "estimating": "Rank projections are predictions, not promises. Always quote a range: worst case assumes nothing is first logged (1x base), best case assumes everything is (5x). Lead with the worst case and round down when uncertain."
+  }
+}

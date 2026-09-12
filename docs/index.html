@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<title>DAME DISCOVERY FIELD LOG</title>
+<style>
+  :root{
+    --bg:#0a0b0d; --panel:#121417; --panel2:#16191d; --line:#25292f;
+    --amber:#ffb02e; --amber-dim:#8a6220;
+    --teal:#43cfc4; --teal-dim:#1f5f5c;
+    --text:#efe8dc; --muted:#8b8578;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'IBM Plex Mono','Consolas','DejaVu Sans Mono',monospace;
+    padding:20px 24px 30px;min-height:100vh;
+    background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px);
+  }
+  h1,.label,th{font-family:'Chakra Petch','Eurostile','Segoe UI',sans-serif}
+
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
+    border-bottom:1px solid var(--line);padding-bottom:11px;margin-bottom:16px}
+  h1{font-size:25px;font-weight:600;letter-spacing:.10em;text-transform:uppercase}
+  h1 span{color:var(--amber)}
+  .sub{font-size:10.5px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:5px}
+  .stamp{text-align:right;font-size:10.5px;color:var(--muted);letter-spacing:.09em;line-height:1.7}
+  .stamp b{color:var(--teal);font-weight:400}
+
+  .label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:9px}
+  .label i{font-style:normal;color:var(--muted);letter-spacing:.12em}
+  .row{display:grid;gap:12px;margin-bottom:12px}
+  .r5{grid-template-columns:repeat(5,1fr)}
+  .r3{grid-template-columns:repeat(3,1fr)}
+  .r2{grid-template-columns:1.15fr 1fr}
+  .rankgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px}
+
+  .tile{background:var(--panel);border:1px solid var(--line);border-top:2px solid var(--amber-dim);padding:12px 13px 11px}
+  .tile .k{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .tile .v{font-size:27px;line-height:1.1;margin-top:6px;color:var(--amber);font-weight:500}
+  .tile .v em{font-style:normal;font-size:12px;color:var(--muted);letter-spacing:.06em}
+  .tile .u{font-size:9.5px;color:var(--muted);letter-spacing:.10em;margin-top:3px}
+  .tile.t2{border-top-color:var(--teal-dim)}
+  .tile.t2 .v{color:var(--teal)}
+
+  .panel{background:var(--panel);border:1px solid var(--line);padding:14px 15px 15px}
+
+  table{width:100%;border-collapse:collapse;font-size:11.5px}
+  th{text-align:left;font-weight:400;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);border-bottom:1px solid var(--line);padding:0 6px 6px 0}
+  th.r,td.r{text-align:right;padding-right:0}
+  td{padding:4.5px 6px 4.5px 0;border-bottom:1px solid #1b1e22}
+  tr:last-child td{border-bottom:none}
+  td.sp{color:var(--teal)}
+  td.n{color:var(--muted)}
+  td.val{color:var(--text)}
+  tr.top td.val{color:var(--amber)}
+  tr.top td.sp{color:var(--amber)}
+  tr.new td.sp::after{content:" NEW";color:var(--amber);font-size:8.5px;letter-spacing:.14em}
+  tfoot td{border-top:1px solid var(--line);border-bottom:none;padding-top:9px;color:var(--amber);font-size:13px}
+  tfoot td.lab{color:var(--muted);font-size:9px;letter-spacing:.16em;text-transform:uppercase}
+
+  .cls{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+  .cls div{background:var(--panel2);border:1px solid var(--line);padding:8px 10px 7px}
+  .cls .k{font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+  .cls .v{font-size:19px;margin-top:3px;color:var(--teal)}
+  .cls .v.a{color:var(--amber)}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .mini{font-size:10.5px;line-height:1.85;color:var(--text);letter-spacing:.02em}
+  .mini u{text-decoration:none;color:var(--muted)}
+  .mini b{color:var(--amber);font-weight:400}
+  .mh{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:6px}
+
+  .flag{border-left:2px solid var(--amber);background:var(--panel2);padding:9px 12px;margin-top:12px;
+    font-size:10.5px;color:var(--muted);line-height:1.7}
+  .flag b{color:var(--amber);font-weight:400}
+  .flag s{text-decoration:none;color:var(--teal)}
+
+  .rank{margin-bottom:14px}
+  .rkline{display:flex;justify-content:space-between;align-items:baseline;font-size:12px}
+  .rkname{color:var(--text);letter-spacing:.04em}
+  .rkname b{color:var(--amber);font-weight:400;font-size:14px}
+  .bar{height:7px;background:var(--panel2);border:1px solid var(--line);margin-top:7px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--teal)}
+  .bar.a i{background:var(--amber)}
+  .rkpct{font-size:11px;color:var(--muted)}
+  .ladder{display:flex;justify-content:space-between;font-size:8.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:#4d4a44;margin-top:5px}
+  .ladder s{text-decoration:none;color:var(--teal)}
+  .ladder u{text-decoration:none;color:var(--amber)}
+  .note{font-size:10.5px;color:var(--muted);line-height:1.75;
+    border-top:1px solid var(--line);padding-top:11px;margin-top:2px}
+  .note b{color:var(--amber);font-weight:400}
+
+  footer{margin-top:14px;border-top:1px solid var(--line);padding-top:10px;
+    font-size:10px;color:var(--muted);line-height:1.8;letter-spacing:.03em}
+  footer b{color:var(--amber);font-weight:400}
+
+  /* sortable manifest */
+  th.s{cursor:pointer;user-select:none;transition:color .12s}
+  th.s:hover{color:var(--amber)}
+  th.s::after{content:"";font-size:8px;letter-spacing:0;margin-left:4px;color:#3d4148}
+  th.s:not(.on)::after{content:"\2195"}
+  th.s.on{color:var(--amber)}
+  th.s.on.desc::after{content:"\25BE";color:var(--amber)}
+  th.s.on.asc::after{content:"\25B4";color:var(--amber)}
+  td.col{color:var(--muted);white-space:nowrap}
+  .bo{color:var(--amber);font-size:9px;margin-left:5px;vertical-align:1px;cursor:help}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;
+    margin-right:6px;vertical-align:-1px;border:1px solid rgba(0,0,0,.55);cursor:help}
+  /* --- added 12 SEP: turnaround note, run-outward figure, manifest cap --- */
+  .trinote{font-size:10.5px;color:var(--muted);line-height:1.7;margin-top:9px}
+  .trinote b{color:var(--teal);font-weight:400}
+  .runwrap{margin-top:2px}
+  .runwrap svg{display:block;width:100%;height:auto}
+  #manifest-scroll{max-height:700px;overflow-y:auto}
+  #manifest-scroll table{width:100%}
+  #manifest-scroll thead th{position:sticky;top:0;background:var(--panel);z-index:1}
+</style>
+<style>
+  .tblwrap,#manifest-scroll{overflow-x:auto}
+  @media (max-width:900px){
+    .row.r5,.tiles{grid-template-columns:repeat(2,1fr)!important}
+    .row.r2,.cols,.exogrid,.cgrid,.two{grid-template-columns:1fr!important}
+    body{padding-left:14px;padding-right:14px}
+    header{flex-direction:column;align-items:flex-start;gap:10px}
+    .stamp{text-align:left}
+  }
+  @media (max-width:560px){ .row.r5,.tiles,.cls{grid-template-columns:1fr!important} }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Dame Discovery <span>Field Log</span></h1>
+    <div class="sub">Now flying <b>Python Mk II &ldquo;Mission Target&rdquo;</b> &nbsp;·&nbsp; ROC, DISCO &amp; the rest stored aboard HOME &nbsp;·&nbsp; CMDR Mister John &nbsp;·&nbsp; 39,767 ly out, far side of the core</div>
+  </div>
+  <div class="stamp">
+    <b>DAY 20</b> · outbound past Sagittarius A* · <b>Prua Ploe NM-K b42-7</b><br>
+    Flying <b>Python Mk II &ldquo;Mission Target&rdquo;</b> · last landing <b>Prua Ploe BX-U c19-5 A 2</b><br>
+    Balance 10.02 B CR · 182 samples held · carrier tank <b>310 t</b>, 14,100 t in the hold
+  </div>
+</header>
+
+<div class="eow">
+  <span class="tag">Standing order</span>
+  <span class="txt">At the close of every night's session, CMDR Mister John says <b>"END OF WATCH"</b>.
+  That phrase is the signal to run the end-of-session routine. Nova — whichever Nova is reading this —
+  acknowledge it, run it, and do not treat it as small talk.</span>
+</div>
+
+<style>
+  /* end-of-watch standing order */
+  .eow{display:flex;align-items:baseline;gap:12px;margin:0 0 12px;
+    background:var(--panel);border:1px solid var(--amber-dim);border-left:3px solid var(--amber);
+    padding:9px 13px 8px}
+  .eow .tag{font-family:'Chakra Petch','Segoe UI',sans-serif;font-size:9px;letter-spacing:.20em;
+    text-transform:uppercase;color:var(--amber);white-space:nowrap}
+  .eow .txt{font-size:10.5px;line-height:1.6;color:var(--muted);letter-spacing:.02em}
+  .eow b{color:var(--text);font-weight:400;letter-spacing:.12em}
+
+  /* tritium burn-down — full-width gauge, one row tall */
+  .tri{position:relative;height:22px;margin:0 0 12px;
+    background:var(--panel2);border:1px solid var(--line)}
+  .tfill{position:absolute;top:0;left:0;bottom:0;
+    background:linear-gradient(90deg,var(--amber-dim),var(--amber))}
+  .thalf{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--teal)}
+  .tri b{position:absolute;top:50%;transform:translateY(-50%);
+    font-family:'IBM Plex Mono','Consolas',monospace;font-weight:400;
+    font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;white-space:nowrap;
+    background:var(--bg);border:1px solid var(--line);padding:2px 6px 1px}
+  .tri b.l{left:5px;color:var(--amber)}
+  .tri b.m{left:50%;margin-left:7px;color:var(--teal)}
+  .tri b.r{right:5px;color:var(--muted)}
+</style>
+
+<div class="row r5">
+  <div class="tile"><div class="k">Days Since Bubble</div><div class="v">20</div><div class="u">departed 23 AUG</div></div>
+  <div class="tile"><div class="k">Hyperspace Jumps</div><div class="v">829</div><div class="u">own FSD, not carrier</div></div>
+  <div class="tile"><div class="k">Distance Flown</div><div class="v">26,728 <em>ly</em></div><div class="u">sum of jump legs</div></div>
+  <div class="tile t2"><div class="k">Body Scans Logged</div><div class="v">14,932</div><div class="u">149 surface-mapped</div></div>
+  <div class="tile t2"><div class="k">Manifest Value</div><div class="v">0.99 &ndash; 4.97 <em>B</em></div><div class="u">182 samples · worst &rarr; best · unsold</div></div>
+</div>
+<style>
+  .exo{background:var(--panel);border:1px solid var(--line);padding:14px 15px 15px;margin-bottom:12px}
+  .exogrid{display:grid;grid-template-columns:1fr 1.25fr;gap:26px;align-items:start}
+
+  .lad{width:100%;border-collapse:collapse;font-size:11.5px}
+  .lad th{text-align:left;font-weight:400;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);border-bottom:1px solid var(--line);padding:0 6px 6px 0}
+  .lad th.r,.lad td.r{text-align:right;padding-right:0}
+  .lad td{padding:4px 6px 4px 0;border-bottom:1px solid #1b1e22;color:#5d5a53}
+  .lad tr:last-child td{border-bottom:none}
+  .lad .pip{display:inline-block;width:7px;height:7px;margin-right:8px;vertical-align:0;
+    border:1px solid #33373d;background:transparent}
+  .lad tr.w td{color:var(--text)}
+  .lad tr.w .pip{background:var(--teal);border-color:var(--teal)}
+  .lad tr.b td{color:var(--text)}
+  .lad tr.b .pip{background:var(--amber);border-color:var(--amber)}
+  .lad tr.tgt td{color:var(--amber);letter-spacing:.05em}
+  .lad tr.tgt .pip{border-color:var(--amber);background:transparent}
+  .lad td.cr{font-size:11px}
+  .lad .at{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;margin-left:7px}
+  .lad .at.w{color:var(--teal)}
+  .lad .at.b{color:var(--amber)}
+
+  .gauge{margin-top:2px}
+  .gwrap{position:relative;height:64px;margin:22px 0 0}
+  .gtrack{position:absolute;left:0;right:0;top:14px;height:13px;
+    background:var(--panel2);border:1px solid var(--line)}
+  .gfill{position:absolute;top:0;left:0;height:100%}
+  .gfill.b{background:linear-gradient(90deg,var(--amber-dim),var(--amber))}
+  .gfill.w{background:var(--teal)}
+  .gtick{position:absolute;top:0;height:13px;width:1px;background:#3b4047}
+  .glabels{position:absolute;left:0;right:0;top:31px;height:30px}
+  .glab{position:absolute;font-size:8px;letter-spacing:.08em;text-transform:uppercase;
+    color:#55524b;white-space:nowrap;transform:translateX(-50%)}
+  .glab.on{color:var(--muted)}
+  .glab.end{transform:translateX(-100%);color:var(--amber)}
+  .gkey{display:flex;gap:20px;margin-top:26px;font-size:10px;color:var(--muted);letter-spacing:.06em}
+  .gkey b{font-weight:400}
+  .gkey .sw{display:inline-block;width:16px;height:8px;margin-right:7px;vertical-align:0}
+  .gkey .sw.w{background:var(--teal)}
+  .gkey .sw.b{background:var(--amber)}
+  .gnums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+  .gnums div{background:var(--panel2);border:1px solid var(--line);padding:8px 10px 7px}
+  .gnums .k{font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+  .gnums .v{font-size:17px;margin-top:3px;color:var(--teal)}
+  .gnums .v.a{color:var(--amber)}
+  .gnums .u{font-size:8.5px;color:#5d5a53;letter-spacing:.08em;margin-top:2px}
+</style>
+
+<div class="effort">
+  <h2>Exobiology <span>Manifest</span></h2><div class="rule"></div>
+  <div class="note">182 samples · 57 species · nothing sold yet</div>
+</div>
+
+<div class="label">Exobiologist Ladder <i>— lifetime Vista Genomics profit &nbsp;·&nbsp; rank moves on sale, never on collection</i></div>
+<div class="exo">
+  <div class="exogrid">
+
+    <table class="lad">
+      <thead>
+        <tr><th>Rank</th><th class="r">Threshold CR</th></tr>
+      </thead>
+      <tbody>
+        <tr class="w"><td><span class="pip"></span>Directionless</td><td class="r cr">0</td></tr>
+        <tr class="w"><td><span class="pip"></span>Mostly Directionless</td><td class="r cr">22,500,000</td></tr>
+        <tr class="w"><td><span class="pip"></span>Compiler</td><td class="r cr">83,475,000</td></tr>
+        <tr class="w"><td><span class="pip"></span>Collector</td><td class="r cr">210,560,000</td></tr>
+        <tr class="w"><td><span class="pip"></span>Cataloguer<span class="at w">worst case lands here</span></td><td class="r cr">532,800,000</td></tr>
+        <tr class="b"><td><span class="pip"></span>Taxonomist</td><td class="r cr">1,144,000,000</td></tr>
+        <tr class="b"><td><span class="pip"></span>Ecologist</td><td class="r cr">2,262,600,000</td></tr>
+        <tr class="b"><td><span class="pip"></span>Geneticist<span class="at b">best case lands here</span></td><td class="r cr">3,996,000,000</td></tr>
+        <tr class="tgt"><td><span class="pip"></span>ELITE<span class="at b">the run</span></td><td class="r cr">8,425,000,000</td></tr>
+        <tr><td><span class="pip"></span>Elite I</td><td class="r cr">12,969,000,000</td></tr>
+        <tr><td><span class="pip"></span>Elite II</td><td class="r cr">17,425,000,000</td></tr>
+        <tr><td><span class="pip"></span>Elite III</td><td class="r cr">21,925,000,000</td></tr>
+        <tr><td><span class="pip"></span>Elite IV</td><td class="r cr">26,320,000,000</td></tr>
+        <tr><td><span class="pip"></span>Elite V</td><td class="r cr">30,553,600,000</td></tr>
+      </tbody>
+    </table>
+
+    <div class="gauge">
+      <div class="mh">Progress toward Elite — 8,425,000,000</div>
+
+      <div class="gwrap">
+        <div class="gtrack">
+          <div class="gfill b" style="width:59.02%"></div>
+          <div class="gfill w" style="width:11.80%"></div>
+          <div class="gtick" style="left:0.27%"></div>
+          <div class="gtick" style="left:0.99%"></div>
+          <div class="gtick" style="left:2.50%"></div>
+          <div class="gtick" style="left:6.32%"></div>
+          <div class="gtick" style="left:13.58%"></div>
+          <div class="gtick" style="left:26.86%"></div>
+          <div class="gtick" style="left:47.43%"></div>
+        </div>
+        <div class="glabels">
+          <div class="glab on" style="left:0.99%;top:0">Compiler</div>
+          <div class="glab on" style="left:2.50%;top:11px">Collector</div>
+          <div class="glab on" style="left:6.32%;top:0">Cataloguer</div>
+          <div class="glab on" style="left:13.58%;top:11px">Taxonomist</div>
+          <div class="glab on" style="left:26.86%;top:0">Ecologist</div>
+          <div class="glab" style="left:47.43%;top:0">Geneticist</div>
+          <div class="glab end" style="left:100%;top:0">ELITE</div>
+        </div>
+      </div>
+
+      <div class="gkey">
+        <span><span class="sw w"></span><b>Worst case</b> — nothing first logged, 11.8%</span>
+        <span><span class="sw b"></span><b>Best case</b> — everything at ×5, 59.0%</span>
+      </div>
+
+      <div class="gnums">
+        <div><div class="k">Worst &mdash; base only</div><div class="v">994,545,600</div><div class="u">&rarr; Cataloguer</div></div>
+        <div><div class="k">Best &mdash; all &times;5</div><div class="v a">4,972,728,000</div><div class="u">&rarr; Geneticist</div></div>
+        <div><div class="k">Short of Elite</div><div class="v a">7.43 &ndash; 3.45 B</div><div class="u">worst &rarr; best</div></div>
+      </div>
+
+      <div class="flag" style="margin-top:14px">
+        Scale is linear against the Elite threshold, so the early ranks bunch at the left &mdash; that spacing is the real shape of the climb, not a drawing error. <b>Worst case holds Cataloguer</b>, about 462 M clear of that floor. <b>Best case holds Geneticist</b>, about 977 M clear of that floor and 3.45 B short of Elite.
+        182 samples, 57 species, all <b>89 of 89</b> bodies never footfalled.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="row r2">
+
+  <div class="panel">
+    <div class="label">Notable Worlds — Logged Since Departure</div>
+
+    <div class="cls">
+      <div><div class="k">Water Worlds</div><div class="v">82</div></div>
+      <div><div class="k">Terraformable WW</div><div class="v a">40</div></div>
+      <div><div class="k">Ammonia Worlds</div><div class="v">19</div></div>
+      <div><div class="k">Earthlikes</div><div class="v a">7</div></div>
+    </div>
+
+    <div class="cols">
+      <div>
+        <div class="mh">Earthlikes &amp; Ammonia Worlds</div>
+        <div class="mini">
+          <b>Phylurn EA-A d14 7</b> <u>· ELW</u><br>
+          <b>Oephail EK-R d4-672 A 2</b> <u>· ELW</u><br>
+          <b>Phaa Aoc SP-D c26-1667 2</b> <u>· ELW</u><br>
+          <b>Eorl Broae RG-Y d659 3</b> <u>· ELW</u><br>
+          <b>Eorl Broae LP-Z c13-2625 A 4</b> <u>· ELW</u><br>
+          <b>Aemonz WV-C d376 B 1</b> <u>· ELW</u><br>
+          <b>Scheau Byoea XO-T c6-242 B 1</b> <u>· ELW</u><br>
+          NGC 3114 Sector OT-Q d5-43 7 <u>· AW</u><br>
+          Fe 1 Sector JB-X d1-45 B 10 <u>· AW</u><br>
+          Syraluia IT-Z d13-23 B 7 <u>· AW</u><br>
+          Plaa Aec AQ-P d5-40 A 7 <u>· AW</u><br>
+          Praea Aec LL-Y d24 8 <u>· AW</u><br>
+          Blu Aec JB-O d6-112 6 <u>· AW</u><br>
+          Oephail EK-R d4-672 A 6 <u>· AW</u><br>
+          Oephail EK-R d4-425 B 5 <u>· AW</u><br>
+          Ongaihn YI-A c14-135 8 <u>· AW</u><br>
+          Dumbue HV-B c27-1594 A 3 <u>· AW</u><br>
+          Phoi Aod SP-O c6-1650 2 <u>· AW</u><br>
+          Phaa Aoc YE-O c20-2299 3 <u>· AW</u><br>
+          Myrierph QZ-G d10-5201 C 4 <u>· AW</u><br>
+          Phipaa GX-L c7-7131 4 <u>· AW</u><br>
+          Phipaa XQ-C c26-2267 2 <u>· AW</u><br>
+          Dryi Broae IO-O b33-24 1 <u>· AW</u><br>
+          Aemonz MB-O c9-232 A 2 <u>· AW</u><br>
+          Aemonz NB-M c24-528 B 6 <u>· AW</u><br>
+          Gooroae UN-T c6-0 A 9 <u>· AW</u>
+        </div>
+      </div>
+      <div>
+        <div class="mh">Terraformable Water Worlds</div>
+        <div class="mini">
+          Wregoe IC-D d12-35 3 <u>· 1,449 Ls · 0.52 g</u><br>
+          Plaa Aec AF-A d78 7 <u>· 1,832 Ls · 1.65 g</u><br>
+          Plaa Aec JR-W d1-33 6 <u>· 1,549 Ls · 0.54 g</u><br>
+          Plaa Aec AQ-P d5-63 AB 4 <u>· 2,420 Ls · 0.99 g</u><br>
+          Plaa Aec AQ-P d5-63 AB 3 <u>· 2,418 Ls · 1.17 g</u><br>
+          Plaa Aec JC-M d7-67 4 a <u>· 1,447 Ls · 0.54 g</u><br>
+          Plaa Aec JC-M d7-16 6 <u>· 1,972 Ls · 1.02 g</u><br>
+          Oephail RW-W d1-160 C 3 <u>· 358,357 Ls · 1.41 g</u><br>
+          Oephail EK-R d4-425 A 7 <u>· 2,256 Ls · 1.19 g</u><br>
+          Oephail JB-O d6-664 4 <u>· 1,665 Ls · 0.9 g</u><br>
+          Oephail NH-M d7-258 A 8 <u>· 1,966 Ls · 0.91 g</u><br>
+          Oephail KN-B d13-1726 6 <u>· 1,240 Ls · 0.93 g</u><br>
+          Shrogaae TY-Z d13-1373 5 <u>· 1,427 Ls · 1.25 g</u><br>
+          Dumbue TC-V d2-2753 5 <u>· 2,465 Ls · 1.56 g</u><br>
+          Phaa Aoc EU-Y c14-57 A 1 <u>· 362 Ls · 0.6 g</u><br>
+          Phaa Aoc OM-T c17-936 A 2 <u>· 179 Ls · 0.53 g</u><br>
+          Phaa Aoc OM-T c17-936 A 1 <u>· 179 Ls · 0.64 g</u><br>
+          Phaa Aoc SP-D c26-1667 3 <u>· 448 Ls · 0.6 g</u><br>
+          Myrierph MT-I d9-3734 B 4 <u>· 19,615 Ls · 1.02 g</u><br>
+          Hypiae Auscs GW-B c27-1030 A 6 <u>· 325 Ls · 0.66 g</u><br>
+          Phoi Auscs PM-W d1-5250 1 <u>· 829 Ls · 0.78 g</u><br>
+          Stuemeae WS-U c2-6213 A 6 <u>· 831 Ls · 1.2 g</u><br>
+          Stuemeae LM-W c1-8559 A 1 <u>· 599 Ls · 1.2 g</u><br>
+          Juenae BA-F c28-1266 C 1 <u>· 477,658 Ls · 0.51 g</u><br>
+          Phipaa LX-L d7-9428 6 <u>· 1,735 Ls · 1.0 g</u><br>
+          Dryio Bli JC-B d1-7671 A 3 <u>· 1,894 Ls · 0.71 g</u><br>
+          Dryuae Chruia JZ-S c3-5566 A 4 <u>· 292 Ls · 0.66 g</u><br>
+          Dryio Bli NT-O d7-980 B 3 <u>· 34,393 Ls · 0.95 g</u><br>
+          Dryio Bli DY-B c16-1453 4 <u>· 184 Ls · 0.83 g</u><br>
+          Dryi Broae XE-R c4-10 1 <u>· 436 Ls · 0.68 g</u><br>
+          Dryi Broae PD-K c8-2886 AB 4 <u>· 458 Ls · 1.28 g</u><br>
+          Braisoea ZJ-Y c17-533 7 <u>· 400 Ls · 1.12 g</u><br>
+          Lasuae GP-Z c13-194 A 1 <u>· 245 Ls · 0.68 g</u><br>
+          Aemonz IT-O d7-9462 A 7 <u>· 1,577 Ls · 0.57 g</u><br>
+          Aemonz IT-O d7-9462 B 1 <u>· 137,153 Ls · 1.54 g</u><br>
+          Aemonz ZI-R c21-621 B 4 <u>· 175,587 Ls · 1.32 g</u><br>
+          Hyuqia RA-U d4-1412 BC 4 <u>· 24,248 Ls · 0.64 g</u><br>
+          Hyuqia TK-B b47-85 B 5 <u>· 12,914 Ls · 0.65 g</u><br>
+          Hyuqia SU-E c28-169 A 1 <u>· 212 Ls · 0.62 g</u><br>
+          Gooroae UN-T c6-0 A 5 <u>· 326 Ls · 0.5 g</u>
+        </div>
+      </div>
+    </div>
+
+    <div class="logdetail">
+      <div class="t">The full sampling narrative &mdash; every landing, world and species note since departure &mdash; now lives on its own page.<br><b>58 entries</b>, nothing discarded.</div>
+      <a href="log-detail.html">Read the log detail &rarr;</a>
+    </div></div>
+
+  <div class="panel">
+    <div class="label">Exobiology Manifest <i>— click any column to sort &nbsp;·&nbsp; <span style="color:var(--amber)">&#9670;</span> likely bonused</i></div>
+    <div id="manifest-scroll">
+    <table id="manifest">
+      <thead>
+        <tr>
+          <th class="s" data-k="0" data-t="s">Species</th>
+          <th class="s" data-k="1" data-t="s">Colour</th>
+          <th class="s r" data-k="2" data-t="n">Qty</th>
+          <th class="s r" data-k="3" data-t="n">Base</th>
+          <th class="s r" data-k="4" data-t="n">Value ×5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="top"><td class="sp">Stratum Tectonicas<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green &times;11"></span><span class="dot" style="background:#a8d84a" title="Lime &times;8"></span><span class="dot" style="background:#2fbf71" title="Emerald &times;3"></span><span class="dot" style="background:#40e0d0" title="Turquoise &times;3"></span><span class="dot" style="background:#9a958c" title="Grey"></span></td><td class="r n" data-v="26">26</td><td class="r n" data-v="494280800">494,280,800</td><td class="r val" data-v="2471404000">2,471,404,000</td></tr>
+        <tr><td class="sp">Bacterium Informem<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Gold"><span class="dot" style="background:#d4a72c" title="Gold"></span><span class="dot" style="background:#d9534f" title="Red"></span><span class="dot" style="background:#e8c33a" title="Yellow"></span><span class="dot" style="background:#4a7fd6" title="Cobalt"></span></td><td class="r n" data-v="4">4</td><td class="r n" data-v="33672000">33,672,000</td><td class="r val" data-v="168360000">168,360,000</td></tr>
+        <tr><td class="sp">Concha Aureolas<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Red"><span class="dot" style="background:#d9534f" title="Red &times;2"></span><span class="dot" style="background:#43cfc4" title="Teal"></span><span class="dot" style="background:#9a958c" title="Grey"></span></td><td class="r n" data-v="4">4</td><td class="r n" data-v="31098800">31,098,800</td><td class="r val" data-v="155494000">155,494,000</td></tr>
+        <tr><td class="sp">Bacterium Alcyoneum</td><td class="col" data-v="Teal"><span class="dot" style="background:#43cfc4" title="Teal &times;3"></span><span class="dot" style="background:#4caf50" title="Green &times;3"></span><span class="dot" style="background:#e8c33a" title="Yellow &times;2"></span><span class="dot" style="background:#9caf88" title="Sage &times;2"></span><span class="dot" style="background:#a8d84a" title="Lime"></span><span class="dot" style="background:#d9534f" title="Red"></span></td><td class="r n" data-v="12">12</td><td class="r n" data-v="19902000">19,902,000</td><td class="r val" data-v="99510000">99,510,000</td></tr>
+        <tr><td class="sp">Electricae Radialem<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Blue"><span class="dot" style="background:#3b82f6" title="Blue"></span><span class="dot" style="background:#d946a0" title="Magenta"></span><span class="dot" style="background:#7fffd4" title="Aquamarine"></span></td><td class="r n" data-v="3">3</td><td class="r n" data-v="18853800">18,853,800</td><td class="r val" data-v="94269000">94,269,000</td></tr>
+        <tr><td class="sp">Bacterium Cerbrus</td><td class="col" data-v="Lime"><span class="dot" style="background:#a8d84a" title="Lime &times;3"></span><span class="dot" style="background:#43cfc4" title="Teal &times;3"></span><span class="dot" style="background:#e8c33a" title="Yellow &times;2"></span><span class="dot" style="background:#4caf50" title="Green &times;2"></span></td><td class="r n" data-v="10">10</td><td class="r n" data-v="16898000">16,898,000</td><td class="r val" data-v="84490000">84,490,000</td></tr>
+        <tr><td class="sp">Osseus Spiralis</td><td class="col" data-v="Indigo"><span class="dot" style="background:#6610f2" title="Indigo &times;3"></span><span class="dot" style="background:#a8d84a" title="Lime &times;2"></span><span class="dot" style="background:#40e0d0" title="Turquoise"></span><span class="dot" style="background:#2fbf71" title="Emerald"></span></td><td class="r n" data-v="7">7</td><td class="r n" data-v="16832900">16,832,900</td><td class="r val" data-v="84164500">84,164,500</td></tr>
+        <tr class="top"><td class="sp">Recepta Deltahedronix<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Red"><span class="dot" style="background:#d9534f" title="Red"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="16202800">16,202,800</td><td class="r val" data-v="81014000">81,014,000</td></tr>
+        <tr class="top"><td class="sp">Fumerola Extremus<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Blue"><span class="dot" style="background:#3b82f6" title="Blue"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="16202800">16,202,800</td><td class="r val" data-v="81014000">81,014,000</td></tr>
+        <tr><td class="sp">Bacterium Volu<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Cobalt"><span class="dot" style="background:#4a7fd6" title="Cobalt"></span><span class="dot" style="background:#22d3ee" title="Cyan"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="15549400">15,549,400</td><td class="r val" data-v="77747000">77,747,000</td></tr>
+        <tr class="top"><td class="sp">Recepta Conditivus<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Cyan"><span class="dot" style="background:#22d3ee" title="Cyan"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="14313700">14,313,700</td><td class="r val" data-v="71568500">71,568,500</td></tr>
+        <tr class="top"><td class="sp">Recepta Umbrux<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Red"><span class="dot" style="background:#d9534f" title="Red"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="12934900">12,934,900</td><td class="r val" data-v="64674500">64,674,500</td></tr>
+        <tr class="top"><td class="sp">Aleoida Gravis<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Teal"><span class="dot" style="background:#43cfc4" title="Teal"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="12934900">12,934,900</td><td class="r val" data-v="64674500">64,674,500</td></tr>
+        <tr class="top"><td class="sp">Osseus Discus<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Peach"><span class="dot" style="background:#f2b28c" title="Peach"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="12934900">12,934,900</td><td class="r val" data-v="64674500">64,674,500</td></tr>
+        <tr><td class="sp">Aleoida Coronamus<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green"></span><span class="dot" style="background:#a8d84a" title="Lime"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="12569200">12,569,200</td><td class="r val" data-v="62846000">62,846,000</td></tr>
+        <tr><td class="sp">Fonticulua Lapida</td><td class="col" data-v="Amethyst"><span class="dot" style="background:#9b6bd6" title="Amethyst &times;2"></span><span class="dot" style="background:#2fbf71" title="Emerald &times;2"></span></td><td class="r n" data-v="4">4</td><td class="r n" data-v="12444000">12,444,000</td><td class="r val" data-v="62220000">62,220,000</td></tr>
+        <tr><td class="sp">Stratum Paleas</td><td class="col" data-v="Lime"><span class="dot" style="background:#a8d84a" title="Lime &times;5"></span><span class="dot" style="background:#2fbf71" title="Emerald &times;3"></span><span class="dot" style="background:#4caf50" title="Green"></span></td><td class="r n" data-v="9">9</td><td class="r n" data-v="12258000">12,258,000</td><td class="r val" data-v="61290000">61,290,000</td></tr>
+        <tr><td class="sp">Bacterium Aurasus</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green &times;6"></span><span class="dot" style="background:#e8c33a" title="Yellow &times;2"></span><span class="dot" style="background:#43cfc4" title="Teal"></span><span class="dot" style="background:#a8d84a" title="Lime"></span><span class="dot" style="background:#2fbf71" title="Emerald"></span><span class="dot" style="background:#9caf88" title="Sage"></span></td><td class="r n" data-v="12">12</td><td class="r n" data-v="12000000">12,000,000</td><td class="r val" data-v="60000000">60,000,000</td></tr>
+        <tr><td class="sp">Tubus Cavas<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Maroon"><span class="dot" style="background:#8b3a3a" title="Maroon"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="11873200">11,873,200</td><td class="r val" data-v="59366000">59,366,000</td></tr>
+        <tr><td class="sp">Frutexa Flammasis<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="10326000">10,326,000</td><td class="r val" data-v="51630000">51,630,000</td></tr>
+        <tr><td class="sp">Tubus Conifer</td><td class="col" data-v="Maroon"><span class="dot" style="background:#8b3a3a" title="Maroon &times;3"></span><span class="dot" style="background:#d9534f" title="Red"></span></td><td class="r n" data-v="4">4</td><td class="r n" data-v="9662000">9,662,000</td><td class="r val" data-v="48310000">48,310,000</td></tr>
+        <tr><td class="sp">Concha Labiata</td><td class="col" data-v="Red"><span class="dot" style="background:#d9534f" title="Red &times;2"></span><span class="dot" style="background:#9a958c" title="Grey &times;2"></span></td><td class="r n" data-v="4">4</td><td class="r n" data-v="9409600">9,409,600</td><td class="r val" data-v="47048000">47,048,000</td></tr>
+        <tr><td class="sp">Tussock Divisa</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green &times;3"></span><span class="dot" style="background:#2fbf71" title="Emerald"></span><span class="dot" style="background:#e8c33a" title="Yellow"></span></td><td class="r n" data-v="5">5</td><td class="r n" data-v="8833000">8,833,000</td><td class="r val" data-v="44165000">44,165,000</td></tr>
+        <tr><td class="sp">Clypeus Lacrimam<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Mauve"><span class="dot" style="background:#b57edc" title="Mauve"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="8418000">8,418,000</td><td class="r val" data-v="42090000">42,090,000</td></tr>
+        <tr><td class="sp">Fonticulua Campestris</td><td class="col" data-v="Amethyst"><span class="dot" style="background:#9b6bd6" title="Amethyst &times;4"></span><span class="dot" style="background:#2fbf71" title="Emerald &times;2"></span><span class="dot" style="background:#b57edc" title="Mauve"></span><span class="dot" style="background:#e8873a" title="Orange"></span></td><td class="r n" data-v="8">8</td><td class="r n" data-v="8000000">8,000,000</td><td class="r val" data-v="40000000">40,000,000</td></tr>
+        <tr><td class="sp">Tubus Rosarium</td><td class="col" data-v="Maroon"><span class="dot" style="background:#8b3a3a" title="Maroon &times;2"></span><span class="dot" style="background:#9a958c" title="Grey"></span></td><td class="r n" data-v="3">3</td><td class="r n" data-v="7912500">7,912,500</td><td class="r val" data-v="39562500">39,562,500</td></tr>
+        <tr><td class="sp">Frutexa Acus<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="7774700">7,774,700</td><td class="r val" data-v="38873500">38,873,500</td></tr>
+        <tr><td class="sp">Tubus Compagibus<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Maroon"><span class="dot" style="background:#8b3a3a" title="Maroon"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="7774700">7,774,700</td><td class="r val" data-v="38873500">38,873,500</td></tr>
+        <tr><td class="sp">Tussock Capillum<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Teal"><span class="dot" style="background:#43cfc4" title="Teal"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="7025800">7,025,800</td><td class="r val" data-v="35129000">35,129,000</td></tr>
+        <tr><td class="sp">Tussock Caputus</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green &times;2"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="6944800">6,944,800</td><td class="r val" data-v="34724000">34,724,000</td></tr>
+        <tr><td class="sp">Aleoida Spica</td><td class="col" data-v="Teal"><span class="dot" style="background:#43cfc4" title="Teal &times;2"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="6770400">6,770,400</td><td class="r val" data-v="33852000">33,852,000</td></tr>
+        <tr><td class="sp">Frutexa Fera</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green &times;2"></span><span class="dot" style="background:#9a958c" title="Grey"></span><span class="dot" style="background:#2fbf71" title="Emerald"></span></td><td class="r n" data-v="4">4</td><td class="r n" data-v="6530000">6,530,000</td><td class="r val" data-v="32650000">32,650,000</td></tr>
+        <tr><td class="sp">Fumerola Aquatis<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="6284600">6,284,600</td><td class="r val" data-v="31423000">31,423,000</td></tr>
+        <tr><td class="sp">Fumerola Carbosis<span class="bo" title="High base value - narrow habitability, rarely logged. First-discovery bonus plausible.">&#9670;</span></td><td class="col" data-v="Cyan"><span class="dot" style="background:#22d3ee" title="Cyan"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="6284600">6,284,600</td><td class="r val" data-v="31423000">31,423,000</td></tr>
+        <tr><td class="sp">Tussock Pennata</td><td class="col" data-v="Lime"><span class="dot" style="background:#a8d84a" title="Lime"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="5853800">5,853,800</td><td class="r val" data-v="29269000">29,269,000</td></tr>
+        <tr><td class="sp">Bacterium Tela</td><td class="col" data-v="Gold"><span class="dot" style="background:#d4a72c" title="Gold"></span><span class="dot" style="background:#e8c33a" title="Yellow"></span><span class="dot" style="background:#4a7fd6" title="Cobalt"></span></td><td class="r n" data-v="3">3</td><td class="r n" data-v="5847000">5,847,000</td><td class="r val" data-v="29235000">29,235,000</td></tr>
+        <tr><td class="sp">Fonticulua Upupam</td><td class="col" data-v="Emerald"><span class="dot" style="background:#2fbf71" title="Emerald"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="5727600">5,727,600</td><td class="r val" data-v="28638000">28,638,000</td></tr>
+        <tr><td class="sp">Frutexa Flabellum</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green &times;2"></span><span class="dot" style="background:#9a958c" title="Grey"></span></td><td class="r n" data-v="3">3</td><td class="r n" data-v="5426700">5,426,700</td><td class="r val" data-v="27133500">27,133,500</td></tr>
+        <tr><td class="sp">Tussock Cultro</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green"></span><span class="dot" style="background:#43cfc4" title="Teal"></span><span class="dot" style="background:#e8c33a" title="Yellow"></span></td><td class="r n" data-v="3">3</td><td class="r n" data-v="5299800">5,299,800</td><td class="r val" data-v="26499000">26,499,000</td></tr>
+        <tr><td class="sp">Tussock Pennatis</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green &times;2"></span><span class="dot" style="background:#2fbf71" title="Emerald"></span><span class="dot" style="background:#e8c33a" title="Yellow"></span><span class="dot" style="background:#9caf88" title="Sage"></span></td><td class="r n" data-v="5">5</td><td class="r n" data-v="5000000">5,000,000</td><td class="r val" data-v="25000000">25,000,000</td></tr>
+        <tr><td class="sp">Stratum Araneamus</td><td class="col" data-v="Emerald"><span class="dot" style="background:#2fbf71" title="Emerald &times;2"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="4897800">4,897,800</td><td class="r val" data-v="24489000">24,489,000</td></tr>
+        <tr><td class="sp">Tussock Serrati</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="4447100">4,447,100</td><td class="r val" data-v="22235500">22,235,500</td></tr>
+        <tr><td class="sp">Bacterium Vesicula</td><td class="col" data-v="Gold"><span class="dot" style="background:#d4a72c" title="Gold &times;2"></span><span class="dot" style="background:#8b8578" title="Mulberry"></span><span class="dot" style="background:#a8d84a" title="Lime"></span></td><td class="r n" data-v="4">4</td><td class="r n" data-v="4000000">4,000,000</td><td class="r val" data-v="20000000">20,000,000</td></tr>
+        <tr><td class="sp">Tussock Ignis</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green &times;2"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="3698000">3,698,000</td><td class="r val" data-v="18490000">18,490,000</td></tr>
+        <tr><td class="sp">Aleoida Laminiae</td><td class="col" data-v="Turquoise"><span class="dot" style="background:#40e0d0" title="Turquoise"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="3385200">3,385,200</td><td class="r val" data-v="16926000">16,926,000</td></tr>
+        <tr><td class="sp">Fungoida Setisis</td><td class="col" data-v="Gold"><span class="dot" style="background:#d4a72c" title="Gold"></span><span class="dot" style="background:#f2b28c" title="Peach"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="3340200">3,340,200</td><td class="r val" data-v="16701000">16,701,000</td></tr>
+        <tr><td class="sp">Fungoida Gelata</td><td class="col" data-v="Cyan"><span class="dot" style="background:#22d3ee" title="Cyan"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="3330300">3,330,300</td><td class="r val" data-v="16651500">16,651,500</td></tr>
+        <tr><td class="sp">Osseus Pumice</td><td class="col" data-v="Green"><span class="dot" style="background:#4caf50" title="Green"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="3156300">3,156,300</td><td class="r val" data-v="15781500">15,781,500</td></tr>
+        <tr><td class="sp">Stratum Laminamus</td><td class="col" data-v="Emerald"><span class="dot" style="background:#2fbf71" title="Emerald"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="2788300">2,788,300</td><td class="r val" data-v="13941500">13,941,500</td></tr>
+        <tr><td class="sp">Cactoida Lapis</td><td class="col" data-v="Orange"><span class="dot" style="background:#e8873a" title="Orange"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="2483600">2,483,600</td><td class="r val" data-v="12418000">12,418,000</td></tr>
+        <tr><td class="sp">Cactoida Peperatis</td><td class="col" data-v="Yellow"><span class="dot" style="background:#e8c33a" title="Yellow"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="2483600">2,483,600</td><td class="r val" data-v="12418000">12,418,000</td></tr>
+        <tr><td class="sp">Stratum Excutitus</td><td class="col" data-v="Lime"><span class="dot" style="background:#a8d84a" title="Lime"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="2448900">2,448,900</td><td class="r val" data-v="12244500">12,244,500</td></tr>
+        <tr><td class="sp">Bacterium Bullaris</td><td class="col" data-v="Yellow"><span class="dot" style="background:#e8c33a" title="Yellow"></span><span class="dot" style="background:#d4a72c" title="Gold"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="2305000">2,305,000</td><td class="r val" data-v="11525000">11,525,000</td></tr>
+        <tr><td class="sp">Tussock Propagito</td><td class="col" data-v="Lime"><span class="dot" style="background:#a8d84a" title="Lime"></span><span class="dot" style="background:#4caf50" title="Green"></span></td><td class="r n" data-v="2">2</td><td class="r n" data-v="2000000">2,000,000</td><td class="r val" data-v="10000000">10,000,000</td></tr>
+        <tr><td class="sp">Fonticulua Digitos</td><td class="col" data-v="Emerald"><span class="dot" style="background:#2fbf71" title="Emerald"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="1804100">1,804,100</td><td class="r val" data-v="9020500">9,020,500</td></tr>
+        <tr><td class="sp">Frutexa Metallicum</td><td class="col" data-v="Teal"><span class="dot" style="background:#43cfc4" title="Teal"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="1632500">1,632,500</td><td class="r val" data-v="8162500">8,162,500</td></tr>
+        <tr><td class="sp">Osseus Cornibus</td><td class="col" data-v="Indigo"><span class="dot" style="background:#6610f2" title="Indigo"></span></td><td class="r n" data-v="1">1</td><td class="r n" data-v="1483000">1,483,000</td><td class="r val" data-v="7415000">7,415,000</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td class="lab">57 species</td><td></td><td class="r">182</td><td class="r">994,545,600</td><td class="r">4,972,728,000</td></tr>
+      </tfoot>
+    </table>
+    </div>
+
+    <div class="logdetail">
+      <div class="t">The full sampling narrative &mdash; every landing, world and species note since departure &mdash; now lives on its own page.<br><b>58 entries</b>, nothing discarded.</div>
+      <a href="log-detail.html">Read the log detail &rarr;</a>
+    </div></div>
+
+</div>
+
+
+<style>
+  /* ---- added when the page was split into two efforts ------------------ */
+  .effort{display:flex;align-items:baseline;gap:14px;margin:22px 0 12px;
+    border-top:1px solid var(--line);padding-top:15px}
+  .effort h2{font-family:'Chakra Petch','Segoe UI',sans-serif;font-size:15px;font-weight:600;
+    letter-spacing:.20em;text-transform:uppercase;color:var(--text);white-space:nowrap}
+  .effort h2 span{color:var(--amber)}
+  .effort .rule{flex:1;height:1px;background:var(--line)}
+  .effort .note{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    white-space:nowrap}
+  .effort.carrier h2 span{color:var(--teal)}
+
+  .logdetail{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--teal);
+    padding:12px 15px 11px;margin-top:12px;flex-wrap:wrap}
+  .logdetail .t{font-size:11px;color:var(--muted);line-height:1.7}
+  .logdetail .t b{color:var(--text);font-weight:400}
+  .logdetail a{font-family:'Chakra Petch','Segoe UI',sans-serif;font-size:10px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--teal);text-decoration:none;
+    border:1px solid var(--teal-dim);padding:7px 14px 6px;white-space:nowrap}
+  .logdetail a:hover{color:var(--amber);border-color:var(--amber-dim)}
+  .logdetail a:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+  /* carrier widgets */
+  .cgrid{display:grid;grid-template-columns:1.05fr 1fr;gap:12px;align-items:start}
+  .cw{background:var(--panel);border:1px solid var(--line);padding:13px 15px 13px}
+  .cw .h{font-family:'Chakra Petch','Segoe UI',sans-serif;font-size:9.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .bar2{height:16px;background:var(--panel2);border:1px solid var(--line);display:flex;overflow:hidden}
+  .bar2 i{display:block;height:100%}
+  .seg{display:flex;flex-wrap:wrap;gap:14px;margin-top:9px;font-size:10px;color:var(--muted);
+    letter-spacing:.05em}
+  .seg span{display:flex;align-items:center;gap:6px}
+  .seg u{text-decoration:none;width:10px;height:10px;display:inline-block}
+  .seg b{color:var(--text);font-weight:400;font-variant-numeric:tabular-nums}
+  .fuel{position:relative;height:26px;background:var(--panel2);border:1px solid var(--line)}
+  .fuel i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--amber-dim),var(--amber))}
+  .fuel.low i{background:linear-gradient(90deg,#7a2d22,#d9534f)}
+  .fuel b{position:absolute;top:50%;transform:translateY(-50%);font-size:9.5px;letter-spacing:.12em;
+    text-transform:uppercase;background:var(--bg);border:1px solid var(--line);padding:2px 7px 1px;
+    font-variant-numeric:tabular-nums}
+  .fuel b.l{left:6px;color:var(--amber)} .fuel.low b.l{color:#e8776f}
+  .fuel b.r{right:6px;color:var(--muted)}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:11.5px;
+    font-variant-numeric:tabular-nums}
+  .kv dt{color:var(--muted);letter-spacing:.04em}
+  .kv dd{color:var(--text);text-align:right}
+  .kv dd.a{color:var(--amber)} .kv dd.t{color:var(--teal)}
+  .svc{display:inline-block;font-size:9px;letter-spacing:.10em;text-transform:uppercase;
+    color:var(--teal);border:1px solid var(--teal-dim);padding:3px 7px 2px;margin:0 5px 5px 0}
+  .alert{border-left:3px solid #d9534f;background:var(--panel2);padding:10px 13px;margin-top:11px;
+    font-size:10.5px;line-height:1.7;color:var(--muted)}
+  .alert b{color:#e8776f;font-weight:400}
+  .ctrack{width:100%;border-collapse:collapse;font-size:11px;font-variant-numeric:tabular-nums}
+  .ctrack td{padding:3.5px 8px 3.5px 0;border-bottom:1px solid #1b1e22}
+  .ctrack tr:last-child td{border-bottom:none}
+  .ctrack td.n{color:var(--muted)} .ctrack td.sys{color:var(--teal)}
+  .ctrack td.r{text-align:right;padding-right:0}
+  .ctrack td.gapleg{color:var(--amber)}
+  .mapwrap svg{display:block;width:auto;max-width:100%;max-height:395px;height:auto;margin:0 auto}
+  @media (max-width:900px){ .cgrid{grid-template-columns:1fr} }
+</style>
+
+
+<div class="effort carrier">
+  <h2>Fleet Carrier <span>HOME</span></h2><div class="rule"></div>
+  <div class="note">WFY-G1Y &nbsp;·&nbsp; logistics, fuel and the road behind us</div>
+</div>
+
+<div class="row r5">
+  <div class="tile t2"><div class="k">Tritium in Tank</div><div class="v">310 <em>t</em></div><div class="u">2 jumps at 120 t each</div></div>
+  <div class="tile t2"><div class="k">Tritium in Hold</div><div class="v">14,100 <em>t</em></div><div class="u">117 more jumps once transferred</div></div>
+  <div class="tile"><div class="k">Jump Range</div><div class="v">500 <em>ly</em></div><div class="u">tritium burns at 120 t a jump</div></div>
+  <div class="tile"><div class="k">Carrier Track</div><div class="v">50,056 <em>ly</em></div><div class="u">82 recorded stops</div></div>
+  <div class="tile"><div class="k">Available Balance</div><div class="v">12.88 <em>B</em></div><div class="u">of 25.05 B, 49% reserved</div></div>
+</div>
+
+<div class="cgrid">
+
+  <div class="cw">
+    <div class="h">Fuel State</div>
+    <div class="fuel low" title="Tritium in the carrier's own tank. The hold carries 14,100 t more, but it has to be transferred in before it can be burned.">
+      <i style="width:31.0%"></i>
+      <b class="l">310 t in tank</b><b class="r">tank holds 1,000 t</b>
+    </div>
+    <div class="alert"><b>Tank is low.</b> 2 jumps left at the observed 120 t per jump. There are <b>14,100 t</b> sitting in the hold &mdash; transfer some across before the next plot, or HOME goes nowhere.</div>
+    <div class="h" style="margin-top:18px">Tritium Aboard &mdash; Turnaround Check</div>
+    <div class="tri" title="17,088 t aboard at the Sagittarius A* baseline. The teal marker is half of that, 8,544 t: burn past it and there is not enough left to get home. Tank 310 t plus 14,100 t in the hold = 14,410 t.">
+      <div class="tfill" style="width:84.3%"></div>
+      <div class="thalf" style="left:50%"></div>
+      <b class="l">Tritium 14,410 t</b>
+      <b class="m">Turn at 8,544</b>
+      <b class="r">&minus;2,678 t vs baseline</b>
+    </div>
+    <div class="trinote">
+      Tank plus hold, against the <b>17,088 t</b> you were carrying at the
+      Sagittarius A* mark. The teal line is half of that &mdash; <b>8,544 t</b>
+      &mdash; the point where you have burned as much as it would take to get back.
+      You are <b>5,866 t</b> clear of it, roughly
+      <b>48 carrier jumps</b> at the observed 120 t a jump.
+    </div>
+    <dl class="kv" style="margin-top:11px">
+      <dt>Fuel to reach Colonia &mdash; 50 jumps</dt><dd class="t">6,000 t</dd>
+      <dt>Fuel to reach the bubble &mdash; 80 jumps</dt><dd class="a">9,600 t</dd>
+      <dt>Further out and still able to reach Colonia</dt><dd class="t">35 jumps &nbsp;<span style="color:var(--faint)">17,500 ly</span></dd>
+      <dt>Further out and still able to reach the bubble</dt><dd class="a">20 jumps &nbsp;<span style="color:var(--faint)">10,000 ly</span></dd>
+    </dl>
+    <div class="trinote">
+      Straight-line distance at the carrier's full 500 ly range and the
+      observed 120 t a jump. The last two lines are halved on purpose: every
+      jump further out also has to be paid for on the way back.
+    </div>
+    <div class="h" style="margin-top:16px">Capacity &mdash; 25,000 t</div>
+    <div class="bar2">
+      <i style="width:56.4%;background:var(--amber-dim)"></i>
+      <i style="width:25.2%;background:var(--teal-dim)"></i>
+      <i style="width:18.4%;background:#1b1e22"></i>
+    </div>
+    <div class="seg">
+      <span><u style="background:var(--amber-dim)"></u>Cargo <b>14,100 t</b></span>
+      <span><u style="background:var(--teal-dim)"></u>Crew &amp; services <b>6,300 t</b></span>
+      <span><u style="background:#1b1e22;border:1px solid var(--line)"></u>Free <b>4,600 t</b></span>
+    </div>
+    <div class="h" style="margin-top:18px">The Run Outward &mdash; every recorded carrier stop</div>
+    <div class="runwrap"><svg viewBox="0 0 1060 250" role="img" aria-label="Carrier route, core-ward distance across and lateral drift vertically, 82 stops."><rect x="0" y="0" width="1060" height="250" fill="#0c0e11"/><line x1="42.3" y1="18" x2="42.3" y2="218" stroke="#25292f" stroke-width="1"/><text x="42.3" y="232" fill="#55524b" font-size="9" font-family="'IBM Plex Mono',monospace" text-anchor="middle">0k</text><line x1="160.7" y1="18" x2="160.7" y2="218" stroke="#25292f" stroke-width="1"/><text x="160.7" y="232" fill="#55524b" font-size="9" font-family="'IBM Plex Mono',monospace" text-anchor="middle">5k</text><line x1="279.1" y1="18" x2="279.1" y2="218" stroke="#25292f" stroke-width="1"/><text x="279.1" y="232" fill="#55524b" font-size="9" font-family="'IBM Plex Mono',monospace" text-anchor="middle">10k</text><line x1="397.5" y1="18" x2="397.5" y2="218" stroke="#25292f" stroke-width="1"/><text x="397.5" y="232" fill="#55524b" font-size="9" font-family="'IBM Plex Mono',monospace" text-anchor="middle">15k</text><line x1="515.9" y1="18" x2="515.9" y2="218" stroke="#25292f" stroke-width="1"/><text x="515.9" y="232" fill="#55524b" font-size="9" font-family="'IBM Plex Mono',monospace" text-anchor="middle">20k</text><line x1="634.3" y1="18" x2="634.3" y2="218" stroke="#25292f" stroke-width="1"/><text x="634.3" y="232" fill="#55524b" font-size="9" font-family="'IBM Plex Mono',monospace" text-anchor="middle">25k</text><line x1="752.7" y1="18" x2="752.7" y2="218" stroke="#25292f" stroke-width="1"/><text x="752.7" y="232" fill="#55524b" font-size="9" font-family="'IBM Plex Mono',monospace" text-anchor="middle">30k</text><line x1="871.1" y1="18" x2="871.1" y2="218" stroke="#25292f" stroke-width="1"/><text x="871.1" y="232" fill="#55524b" font-size="9" font-family="'IBM Plex Mono',monospace" text-anchor="middle">35k</text><line x1="655.7" y1="18" x2="655.7" y2="218" stroke="#1f5f5c" stroke-width="1" stroke-dasharray="3 4"/><text x="660.7" y="29" fill="#43cfc4" font-size="9" font-family="'Chakra Petch',sans-serif" letter-spacing="0.10em">SGR A*</text><line x1="45.4" y1="192.2" x2="42.0" y2="183.7" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="42.0" y1="183.7" x2="47.2" y2="175.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="47.2" y1="175.8" x2="48.2" y2="167.0" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="48.2" y1="167.0" x2="50.6" y2="158.5" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="50.6" y1="158.5" x2="56.6" y2="150.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="56.6" y1="150.8" x2="62.0" y2="143.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="62.0" y1="143.1" x2="67.3" y2="135.3" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="67.3" y1="135.3" x2="71.6" y2="127.4" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="71.6" y1="127.4" x2="78.6" y2="120.4" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="78.6" y1="120.4" x2="86.6" y2="113.9" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="86.6" y1="113.9" x2="94.9" y2="108.0" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="94.9" y1="108.0" x2="102.6" y2="101.4" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="102.6" y1="101.4" x2="110.0" y2="94.6" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="110.0" y1="94.6" x2="121.7" y2="94.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="121.7" y1="94.1" x2="128.0" y2="86.7" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="128.0" y1="86.7" x2="137.7" y2="82.0" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="137.7" y1="82.0" x2="146.6" y2="76.6" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="146.6" y1="76.6" x2="156.4" y2="71.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="156.4" y1="71.8" x2="167.4" y2="69.0" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="167.4" y1="69.0" x2="178.2" y2="65.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="178.2" y1="65.2" x2="188.0" y2="60.6" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="188.0" y1="60.6" x2="197.8" y2="56.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="197.8" y1="56.1" x2="219.2" y2="49.5" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="219.2" y1="49.5" x2="230.5" y2="47.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="230.5" y1="47.1" x2="241.5" y2="44.3" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="241.5" y1="44.3" x2="253.0" y2="43.3" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="253.0" y1="43.3" x2="264.2" y2="43.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="264.2" y1="43.8" x2="275.8" y2="45.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="275.8" y1="45.1" x2="287.6" y2="44.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="287.6" y1="44.1" x2="299.1" y2="42.7" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="299.1" y1="42.7" x2="310.8" y2="43.3" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="310.8" y1="43.3" x2="322.4" y2="42.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="322.4" y1="42.2" x2="333.9" y2="43.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="333.9" y1="43.1" x2="345.2" y2="42.9" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="345.2" y1="42.9" x2="357.0" y2="44.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="357.0" y1="44.1" x2="368.6" y2="44.9" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="368.6" y1="44.9" x2="380.2" y2="45.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="380.2" y1="45.2" x2="391.7" y2="47.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="391.7" y1="47.2" x2="402.6" y2="50.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="402.6" y1="50.2" x2="414.1" y2="50.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="414.1" y1="50.8" x2="425.1" y2="53.9" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="425.1" y1="53.9" x2="435.1" y2="58.4" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="435.1" y1="58.4" x2="445.3" y2="62.6" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="445.3" y1="62.6" x2="456.3" y2="65.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="456.3" y1="65.8" x2="478.0" y2="72.7" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="478.0" y1="72.7" x2="488.1" y2="77.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="488.1" y1="77.2" x2="540.6" y2="95.9" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="540.6" y1="95.9" x2="540.6" y2="95.9" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="540.6" y1="95.9" x2="598.0" y2="126.3" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="598.0" y1="126.3" x2="608.6" y2="130.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="608.6" y1="130.2" x2="618.8" y2="134.5" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="618.8" y1="134.5" x2="628.4" y2="139.6" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="628.4" y1="139.6" x2="638.7" y2="143.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="638.7" y1="143.8" x2="656.5" y2="154.7" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="656.5" y1="154.7" x2="658.4" y2="171.3" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="658.4" y1="171.3" x2="659.1" y2="180.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="659.1" y1="180.1" x2="655.6" y2="193.7" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="655.6" y1="193.7" x2="655.7" y2="193.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="655.7" y1="193.8" x2="666.7" y2="190.6" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="666.7" y1="190.6" x2="676.6" y2="186.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="676.6" y1="186.2" x2="683.4" y2="179.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="683.4" y1="179.1" x2="691.5" y2="172.8" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="691.5" y1="172.8" x2="698.1" y2="165.6" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="698.1" y1="165.6" x2="708.9" y2="162.1" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="708.9" y1="162.1" x2="742.2" y2="153.8" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="742.2" y1="153.8" x2="753.7" y2="151.9" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="753.7" y1="151.9" x2="765.4" y2="151.4" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="765.4" y1="151.4" x2="776.8" y2="149.0" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="776.8" y1="149.0" x2="797.3" y2="140.4" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="797.3" y1="140.4" x2="808.3" y2="137.2" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="808.3" y1="137.2" x2="856.2" y2="113.5" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="856.2" y1="113.5" x2="865.6" y2="108.0" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="865.6" y1="108.0" x2="877.1" y2="102.6" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="877.1" y1="102.6" x2="887.2" y2="98.0" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="887.2" y1="98.0" x2="919.7" y2="101.2" stroke="#8a6220" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="919.7" y1="101.2" x2="930.5" y2="104.3" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="930.5" y1="104.3" x2="942.2" y2="104.3" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="942.2" y1="104.3" x2="953.4" y2="101.5" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="953.4" y1="101.5" x2="963.0" y2="96.5" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="963.0" y1="96.5" x2="964.8" y2="105.0" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><line x1="964.8" y1="105.0" x2="976.0" y2="102.5" stroke="#ffb02e" stroke-width="2" stroke-linecap="round"/><circle cx="45.4" cy="192.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Col 285 Sector NO-M b22-7 &#10;2026-08-23 &#10;176 ly from Sol</title></circle><circle cx="42.0" cy="183.7" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Wregoe IC-D d12-35 &#10;2026-08-24 &#10;595 ly from Sol</title></circle><circle cx="47.2" cy="175.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Wregoe VO-Z d13-79 &#10;2026-08-25 &#10;1,063 ly from Sol</title></circle><circle cx="48.2" cy="167.0" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Pro Eurl OV-Y b4 &#10;2026-08-25 &#10;1,559 ly from Sol</title></circle><circle cx="50.6" cy="158.5" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Pro Eurl OG-Y d106 &#10;2026-08-25 &#10;2,049 ly from Sol</title></circle><circle cx="56.6" cy="150.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Pro Eurl FZ-S d3-21 &#10;2026-08-26 &#10;2,523 ly from Sol</title></circle><circle cx="62.0" cy="143.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>NGC 3114 Sector OT-Q d5-43 &#10;2026-08-26 &#10;3,006 ly from Sol</title></circle><circle cx="67.3" cy="135.3" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Sifeae YJ-I d9-39 &#10;2026-08-26 &#10;3,492 ly from Sol</title></circle><circle cx="71.6" cy="127.4" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Fe 1 Sector JB-X d1-45 &#10;2026-08-26 &#10;3,973 ly from Sol</title></circle><circle cx="78.6" cy="120.4" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Phylurn EA-A d14 &#10;2026-08-27 &#10;4,441 ly from Sol</title></circle><circle cx="86.6" cy="113.9" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Col 240 Sector JI-S d4-5 &#10;2026-08-27 &#10;4,905 ly from Sol</title></circle><circle cx="94.9" cy="108.0" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>IC 2944 Sector AH-T d4-9 &#10;2026-08-27 &#10;5,350 ly from Sol</title></circle><circle cx="102.6" cy="101.4" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>IC 2944 Sector XA-M d8-0 &#10;2026-08-27 &#10;5,827 ly from Sol</title></circle><circle cx="110.0" cy="94.6" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>IC 2944 Sector SZ-E d12-31 &#10;2026-08-27 &#10;6,310 ly from Sol</title></circle><circle cx="121.7" cy="94.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Smojou JR-N d6-54 &#10;2026-08-27 &#10;6,574 ly from Sol</title></circle><circle cx="128.0" cy="86.7" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>NGC 4349 Sector NI-T d3-135 &#10;2026-08-27 &#10;7,070 ly from Sol</title></circle><circle cx="137.7" cy="82.0" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Smojuae IO-Z d13-213 &#10;2026-08-27 &#10;7,510 ly from Sol</title></circle><circle cx="146.6" cy="76.6" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Bleae Eurl RD-T d3-26 &#10;2026-08-27 &#10;7,971 ly from Sol</title></circle><circle cx="156.4" cy="71.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Bleae Eurl TY-S e3-41 &#10;2026-08-27 &#10;8,425 ly from Sol</title></circle><circle cx="167.4" cy="69.0" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Bleae Eurl PT-Z d13-167 &#10;2026-08-28 &#10;8,831 ly from Sol</title></circle><circle cx="178.2" cy="65.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Byua Eurl DK-R d4-107 &#10;2026-08-28 &#10;9,274 ly from Sol</title></circle><circle cx="188.0" cy="60.6" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Byua Eurl BP-I d9-97 &#10;2026-08-28 &#10;9,737 ly from Sol</title></circle><circle cx="197.8" cy="56.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Syraluia IT-Z d13-69 &#10;2026-08-28 &#10;10,197 ly from Sol</title></circle><circle cx="219.2" cy="49.5" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Plaa Aec TO-I d9-27 &#10;2026-08-28 &#10;11,076 ly from Sol</title></circle><circle cx="230.5" cy="47.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Praea Aec GF-A d4 &#10;2026-08-28 &#10;11,500 ly from Sol</title></circle><circle cx="241.5" cy="44.3" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Praea Aec GQ-P d5-19 &#10;2026-08-28 &#10;11,936 ly from Sol</title></circle><circle cx="253.0" cy="43.3" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Praea Aec FB-F d11-62 &#10;2026-08-29 &#10;12,322 ly from Sol</title></circle><circle cx="264.2" cy="43.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Slenguia RR-W d1-78 &#10;2026-08-29 &#10;12,651 ly from Sol</title></circle><circle cx="275.8" cy="45.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Slenguia MH-M d7-23 &#10;2026-08-29 &#10;12,971 ly from Sol</title></circle><circle cx="287.6" cy="44.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Slenguia KS-B d13-20 &#10;2026-08-29 &#10;13,387 ly from Sol</title></circle><circle cx="299.1" cy="42.7" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Oofaih ZD-T d3-67 &#10;2026-08-29 &#10;13,813 ly from Sol</title></circle><circle cx="310.8" cy="43.3" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Oofaih BV-G d10-63 &#10;2026-08-29 &#10;14,185 ly from Sol</title></circle><circle cx="322.4" cy="42.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Blu Aec MQ-Y d13 &#10;2026-08-29 &#10;14,614 ly from Sol</title></circle><circle cx="333.9" cy="43.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Blu Aec JB-O d6-112 &#10;2026-08-29 &#10;14,984 ly from Sol</title></circle><circle cx="345.2" cy="42.9" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Blu Aec HM-D d12-110 &#10;2026-08-29 &#10;15,384 ly from Sol</title></circle><circle cx="357.0" cy="44.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Pueleia SC-V d2-77 &#10;2026-08-29 &#10;15,764 ly from Sol</title></circle><circle cx="368.6" cy="44.9" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Pueleia QN-K d8-85 &#10;2026-08-29 &#10;16,155 ly from Sol</title></circle><circle cx="380.2" cy="45.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Pueleia OY-Z d13-62 &#10;2026-08-29 &#10;16,566 ly from Sol</title></circle><circle cx="391.7" cy="47.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Froaphs AK-R d4-92 &#10;2026-08-29 &#10;16,929 ly from Sol</title></circle><circle cx="402.6" cy="50.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Froaphs WU-G d10-34 &#10;2026-08-30 &#10;17,251 ly from Sol</title></circle><circle cx="414.1" cy="50.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Byeia Aihm IL-Y d107 &#10;2026-08-30 &#10;17,668 ly from Sol</title></circle><circle cx="425.1" cy="53.9" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Byeia Aihm BB-O d6-231 &#10;2026-08-30 &#10;18,006 ly from Sol</title></circle><circle cx="435.1" cy="58.4" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Byeia Aihm SF-F d11-274 &#10;2026-08-30 &#10;18,274 ly from Sol</title></circle><circle cx="445.3" cy="62.6" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Oephail RW-W d1-160 &#10;2026-08-30 &#10;18,570 ly from Sol</title></circle><circle cx="456.3" cy="65.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Oephail JB-O d6-664 &#10;2026-08-30 &#10;18,927 ly from Sol</title></circle><circle cx="478.0" cy="72.7" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Dryao Aoc OC-V d2-1138 &#10;2026-08-30 &#10;19,638 ly from Sol</title></circle><circle cx="488.1" cy="77.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Dryao Aoc FH-M d7-47 &#10;2026-08-30 &#10;19,950 ly from Sol</title></circle><circle cx="540.6" cy="95.9" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Shrogeau VY-X b15-139 &#10;2026-08-30 &#10;21,763 ly from Sol</title></circle><circle cx="540.6" cy="95.9" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Shrogeau UY-X b15-60 &#10;2026-08-31 &#10;21,762 ly from Sol</title></circle><circle cx="598.0" cy="126.3" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Phoi Aod LD-S c4-2926 &#10;2026-09-01 &#10;23,779 ly from Sol</title></circle><circle cx="608.6" cy="130.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Phaa Aoc EU-Y c14-1043 &#10;2026-09-01 &#10;24,184 ly from Sol</title></circle><circle cx="618.8" cy="134.5" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Phaa Aoc GM-D d12-5463 &#10;2026-09-02 &#10;24,578 ly from Sol</title></circle><circle cx="628.4" cy="139.6" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Myrierph YD-S c4-464 &#10;2026-09-02 &#10;24,943 ly from Sol</title></circle><circle cx="638.7" cy="143.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Myrierph GH-M d7-9608 &#10;2026-09-02 &#10;25,344 ly from Sol</title></circle><circle cx="656.5" cy="154.7" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Phoi Auscs MQ-Y d3210 &#10;2026-09-03 &#10;26,034 ly from Sol</title></circle><circle cx="658.4" cy="171.3" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Phoi Auscs UJ-R c4-2466 &#10;2026-09-03 &#10;26,050 ly from Sol</title></circle><circle cx="659.1" cy="180.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Stuemeae NK-R c4-6481 &#10;2026-09-04 &#10;26,057 ly from Sol</title></circle><circle cx="655.6" cy="193.7" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Stuemeae KM-W c1-342 &#10;2026-09-04 &#10;25,899 ly from Sol</title></circle><circle cx="655.7" cy="193.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Sagittarius A* &#10;2026-09-04 &#10;25,900 ly from Sol</title></circle><circle cx="666.7" cy="190.6" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Stuemeae GC-D c12-6901 &#10;2026-09-04 &#10;26,367 ly from Sol</title></circle><circle cx="676.6" cy="186.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Stuemeae CW-E d11-6273 &#10;2026-09-05 &#10;26,788 ly from Sol</title></circle><circle cx="683.4" cy="179.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Stuemeae TO-Z d13-8804 &#10;2026-09-05 &#10;27,084 ly from Sol</title></circle><circle cx="691.5" cy="172.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Eos Chrea BT-U d2-7307 &#10;2026-09-06 &#10;27,439 ly from Sol</title></circle><circle cx="698.1" cy="165.6" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Phipaa HR-N d6-10019 &#10;2026-09-06 &#10;27,740 ly from Sol</title></circle><circle cx="708.9" cy="162.1" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Eoch Bli DY-F d12-7838 &#10;2026-09-06 &#10;28,207 ly from Sol</title></circle><circle cx="742.2" cy="153.8" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Dryio Bli NE-E d13-7182 &#10;2026-09-07 &#10;29,642 ly from Sol</title></circle><circle cx="753.7" cy="151.9" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Eoch Byio AV-V d3-702 &#10;2026-09-07 &#10;30,134 ly from Sol</title></circle><circle cx="765.4" cy="151.4" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Eoch Byio ED-T c20-1156 &#10;2026-09-07 &#10;30,631 ly from Sol</title></circle><circle cx="776.8" cy="149.0" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Dryi Broae SY-S b3-14 &#10;2026-09-07 &#10;31,122 ly from Sol</title></circle><circle cx="797.3" cy="140.4" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Braisoea UL-J d10-3801 &#10;2026-09-07 &#10;32,028 ly from Sol</title></circle><circle cx="808.3" cy="137.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Schee Bli JC-B d1-1585 &#10;2026-09-07 &#10;32,505 ly from Sol</title></circle><circle cx="856.2" cy="113.5" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Aemonz JZ-N b40-10 &#10;2026-09-08 &#10;34,672 ly from Sol</title></circle><circle cx="865.6" cy="108.0" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Aemonz AT-E b59-50 &#10;2026-09-09 &#10;35,103 ly from Sol</title></circle><circle cx="877.1" cy="102.6" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Hyuqia RA-U d4-1412 &#10;2026-09-09 &#10;35,630 ly from Sol</title></circle><circle cx="887.2" cy="98.0" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Hyuqia ZF-K b42-67 &#10;2026-09-09 &#10;36,090 ly from Sol</title></circle><circle cx="919.7" cy="101.2" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Phroea Byoea OJ-P c22-87 &#10;2026-09-09 &#10;37,420 ly from Sol</title></circle><circle cx="930.5" cy="104.3" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Bleetho PL-X b7-6 &#10;2026-09-09 &#10;37,847 ly from Sol</title></circle><circle cx="942.2" cy="104.3" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Bleetho JO-F b31-4 &#10;2026-09-10 &#10;38,339 ly from Sol</title></circle><circle cx="953.4" cy="101.5" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Bleetho JG-P b53-0 &#10;2026-09-10 &#10;38,830 ly from Sol</title></circle><circle cx="963.0" cy="96.5" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Gooroae DW-O b12-1 &#10;2026-09-10 &#10;39,269 ly from Sol</title></circle><circle cx="964.8" cy="105.0" r="3.4" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.3"><title>Prua Ploe HW-H b16-2 &#10;2026-09-10 &#10;39,282 ly from Sol</title></circle><circle cx="976.0" cy="102.5" r="5" fill="#ffb02e" stroke="#0c0e11" stroke-width="1.3"><title>Gooroae QF-T b37-5 &#10;2026-09-11 &#10;39,767 ly from Sol</title></circle><text x="42" y="246" fill="#8b8578" font-size="9" font-family="'Chakra Petch',sans-serif" letter-spacing="0.16em">CORE-WARD DISTANCE (LY)</text><text x="13" y="118" fill="#8b8578" font-size="9" font-family="'Chakra Petch',sans-serif" letter-spacing="0.16em" text-anchor="middle" transform="rotate(-90 13 118)">LATERAL DRIFT</text><text x="968.0" y="91.5" fill="#ffb02e" font-size="10" font-family="'Chakra Petch',sans-serif" letter-spacing="0.10em" text-anchor="end">HOME</text></svg></div>
+    <div class="trinote">
+      Left to right is distance toward the core. Dashed legs are jumps made while
+      he was logged out. Hover any stop for the system and the date.
+    </div>
+    <div class="h" style="margin-top:18px">Finance</div>
+    <dl class="kv">
+      <dt>Carrier balance</dt><dd class="a">25,047,716,867 CR</dd>
+      <dt>Available to spend</dt><dd>12,879,672,098 CR</dd>
+      <dt>Held in reserve</dt><dd class="t">12,168,044,769 CR &nbsp;<span style="color:var(--faint)">49%</span></dd>
+      <dt>Upkeep tax, all services</dt><dd>10%</dd>
+    </dl>
+  </div>
+
+  <div class="cw">
+    <div class="h">Where HOME Has Been &mdash; 82 stops, 50,056 ly</div>
+    <div class="mapwrap"><svg viewBox="0 0 300 330" role="img" aria-label="Top-down galaxy map of HOME's route out past the core."><rect x="0" y="0" width="300" height="330" fill="#0c0e11"/><circle cx="150.1" cy="180.3" r="126.3" fill="#101318" stroke="#25292f"/><circle cx="150.1" cy="180.3" r="56.7" fill="#13161c"/><circle cx="150.1" cy="180.3" r="13.4" fill="#1a1d24"/><circle cx="150.0" cy="247.0" r="25.8" fill="none" stroke="#3a2a11" stroke-width="1" stroke-dasharray="2 5"/><circle cx="150.0" cy="247.0" r="51.5" fill="none" stroke="#3a2a11" stroke-width="1" stroke-dasharray="2 5"/><circle cx="150.0" cy="247.0" r="77.3" fill="none" stroke="#3a2a11" stroke-width="1" stroke-dasharray="2 5"/><circle cx="150.0" cy="247.0" r="103.1" fill="none" stroke="#3a2a11" stroke-width="1" stroke-dasharray="2 5"/><circle cx="150.0" cy="247.0" r="2.6" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.2"/><text x="156.0" y="250.0" fill="#43cfc4" font-size="8" font-family="'Chakra Petch',sans-serif" letter-spacing="0.08em" text-anchor="start">Sol</text><circle cx="125.4" cy="196.0" r="2.6" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.2"/><text x="119.4" y="199.0" fill="#43cfc4" font-size="8" font-family="'Chakra Petch',sans-serif" letter-spacing="0.08em" text-anchor="end">Colonia</text><circle cx="150.1" cy="180.3" r="2.6" fill="#43cfc4" stroke="#0c0e11" stroke-width="1.2"/><text x="156.1" y="183.3" fill="#43cfc4" font-size="8" font-family="'Chakra Petch',sans-serif" letter-spacing="0.08em" text-anchor="start">Sgr A*</text><path d="M150.3 246.7 L151.5 247.0 L152.7 246.5 L154.0 246.4 L155.2 246.1 L156.3 245.5 L157.4 244.9 L158.6 244.3 L159.7 243.8 L160.7 243.1 L161.7 242.2 L162.5 241.3 L163.5 240.4 L164.5 239.6 L164.6 238.4 L165.7 237.7 L166.3 236.6 L167.1 235.7 L167.8 234.6 L168.2 233.4 L168.8 232.2 L169.5 231.2 L170.1 230.1 L171.1 227.7 L171.4 226.5 L171.8 225.3 L172.0 224.1 L171.9 222.9 L171.7 221.6 L171.9 220.3 L172.1 219.1 L172.0 217.8 L172.1 216.5 L172.0 215.3 L172.0 214.0 L171.9 212.8 L171.7 211.5 L171.7 210.2 L171.4 209.0 L171.0 207.8 L170.9 206.5 L170.4 205.3 L169.8 204.3 L169.2 203.1 L168.7 201.9 L167.7 199.6 L167.0 198.5 L164.3 192.8 L164.3 192.8 L159.9 186.5 L159.3 185.4 L158.7 184.3 L157.9 183.2 L157.3 182.1 L155.7 180.2 L153.3 180.0 L152.1 179.9 L150.1 180.3 L150.1 180.3 L150.5 179.1 L151.2 178.0 L152.2 177.2 L153.1 176.4 L154.2 175.6 L154.7 174.5 L155.9 170.8 L156.2 169.6 L156.2 168.3 L156.6 167.1 L157.8 164.8 L158.3 163.6 L161.8 158.4 L162.5 157.4 L163.3 156.2 L164.0 155.1 L163.5 151.5 L163.1 150.4 L163.1 149.1 L163.5 147.9 L164.2 146.8 L163.0 146.6 L163.4 145.4" fill="none" stroke="#ffb02e" stroke-width="1.6" stroke-linejoin="round"/><circle cx="163.4" cy="145.4" r="6" fill="none" stroke="#ffb02e" opacity=".45"/><circle cx="163.4" cy="145.4" r="3.4" fill="#ffb02e" stroke="#0c0e11" stroke-width="1.2"/><text x="172.4" y="148.4" fill="#ffb02e" font-size="8.5" font-family="'Chakra Petch',sans-serif" letter-spacing="0.09em">HOME</text></svg></div>
+    <dl class="kv" style="margin-top:12px">
+      <dt>Now at</dt><dd class="t">Gooroae QF-T b37-5</dd>
+      <dt>From Sol</dt><dd class="a">39,767 ly</dd>
+      <dt>From Sagittarius A*</dt><dd>14,478 ly</dd>
+      <dt>From Colonia</dt><dd>24,539 ly</dd>
+    </dl>
+    <div class="h" style="margin-top:18px">Services Online &mdash; 12</div>
+    <div><span class="svc">BlackMarket</span><span class="svc">Captain</span><span class="svc">Refuel</span><span class="svc">Repair</span><span class="svc">Rearm</span><span class="svc">Commodities</span><span class="svc">VoucherRedemption</span><span class="svc">Exploration</span><span class="svc">Shipyard</span><span class="svc">Outfitting</span><span class="svc">CarrierFuel</span><span class="svc">Bartender</span></div>
+    <div class="h" style="margin-top:18px">Last Fourteen Stops</div>
+    <table class="ctrack"><tr><td class="n">09-11</td><td class="sys">Gooroae QF-T b37-5</td><td class="r">493</td><td class="r n">39,767</td></tr><tr><td class="n">09-10</td><td class="sys">Prua Ploe HW-H b16-2</td><td class="r">490</td><td class="r n">39,282</td></tr><tr><td class="n">09-10</td><td class="sys">Gooroae DW-O b12-1</td><td class="r">494</td><td class="r n">39,269</td></tr><tr><td class="n">09-10</td><td class="sys">Bleetho JG-P b53-0</td><td class="r">499</td><td class="r n">38,830</td></tr><tr><td class="n">09-10</td><td class="sys">Bleetho JO-F b31-4</td><td class="r">496</td><td class="r n">38,339</td></tr><tr><td class="n">09-09</td><td class="sys">Bleetho PL-X b7-6</td><td class="r">488</td><td class="r n">37,847</td></tr><tr><td class="n">09-09</td><td class="sys">Phroea Byoea OJ-P c22-87</td><td class="r gapleg">1,383</td><td class="r n">37,420</td></tr><tr><td class="n">09-09</td><td class="sys">Hyuqia ZF-K b42-67</td><td class="r">499</td><td class="r n">36,090</td></tr><tr><td class="n">09-09</td><td class="sys">Hyuqia RA-U d4-1412</td><td class="r gapleg">578</td><td class="r n">35,630</td></tr><tr><td class="n">09-09</td><td class="sys">Aemonz AT-E b59-50</td><td class="r">498</td><td class="r n">35,103</td></tr><tr><td class="n">09-08</td><td class="sys">Aemonz JZ-N b40-10</td><td class="r gapleg">2,431</td><td class="r n">34,672</td></tr><tr><td class="n">09-07</td><td class="sys">Schee Bli JC-B d1-1585</td><td class="r">496</td><td class="r n">32,505</td></tr><tr><td class="n">09-07</td><td class="sys">Braisoea UL-J d10-3801</td><td class="r gapleg">994</td><td class="r n">32,028</td></tr><tr><td class="n">09-07</td><td class="sys">Dryi Broae SY-S b3-14</td><td class="r">500</td><td class="r n">31,122</td></tr></table>
+    <div class="alert" style="border-left-color:var(--amber-dim)">
+      Legs in <b style="color:var(--amber)">amber</b> are longer than one
+      500 ly jump &mdash; HOME moved while he was logged out, so those
+      intermediate stops were never written to the journal.
+      <b style="color:var(--amber)">12</b> of 81 legs are like that.
+    </div>
+  </div>
+
+</div>
+
+
+<footer>
+  Built 12 SEP 2026 00:58 UTC from the journals. <b>Two efforts, tracked separately:</b> exobiology above, the carrier below.<br>
+  Exobiology rank moves only when samples are <b>sold</b> at Vista Genomics &mdash; nothing has been sold. The first-logged bonus is <b>&times;5 total</b> and is awarded per species <b>per body</b>, to whoever sells first.<br>
+  The running narrative lives on <b>log-detail.html</b>.
+</footer>
+
+<script>
+(function(){
+  var tbl = document.getElementById('manifest');
+  if(!tbl) return;
+  var body = tbl.tBodies[0];
+  var heads = tbl.querySelectorAll('th.s');
+
+  function cellVal(row, k, t){
+    var td = row.cells[k];
+    var raw = td.getAttribute('data-v');
+    if(raw === null) raw = td.textContent;
+    return t === 'n' ? parseFloat(String(raw).replace(/[^0-9.\-]/g,'')) || 0
+                     : String(raw).trim().toLowerCase();
+  }
+
+  function sortBy(th){
+    var k = +th.getAttribute('data-k');
+    var t = th.getAttribute('data-t');
+    var wasOn = th.classList.contains('on');
+    var desc = wasOn ? !th.classList.contains('desc') : (t === 'n');
+
+    Array.prototype.forEach.call(heads, function(h){
+      h.classList.remove('on','asc','desc');
+    });
+    th.classList.add('on', desc ? 'desc' : 'asc');
+
+    var rows = Array.prototype.slice.call(body.rows);
+    rows.sort(function(a,b){
+      var x = cellVal(a,k,t), y = cellVal(b,k,t);
+      if(x < y) return desc ? 1 : -1;
+      if(x > y) return desc ? -1 : 1;
+      // stable tie-break: highest value first
+      return cellVal(b,4,'n') - cellVal(a,4,'n');
+    });
+    rows.forEach(function(r){ body.appendChild(r); });
+  }
+
+  Array.prototype.forEach.call(heads, function(h){
+    h.addEventListener('click', function(){ sortBy(h); });
+  });
+
+  // open sorted by value, highest first, whatever order the markup is in
+  sortBy(tbl.querySelector('th[data-k="4"]'));
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+# ── SECRETS — never commit these ─────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.token
+*credential*
+.claude/
+# system_prompt.txt is generated from config.py at launch
+system_prompt.txt
+
+# ── Personal data / transcripts ──────────────────────────────────────
+conversation.log
+# Elite Dangerous journals and application logs
+*.log
+reference/watch_status.json
+reference/exobiology_status.json
+reference/carrier_status.json
+reference/live_context.json
+reference/live_cursor.json
+reference/dashboard_updates.json
+reference/nova-logbook.html
+trip_days.json
+trip_flora.json
+
+# ── Python / build cruft ─────────────────────────────────────────────
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+
+# ── Screenshots ──────────────────────────────────────────────────────
+*.jpg
+*.png
