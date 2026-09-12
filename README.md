@@ -6,7 +6,7 @@ answers questions out loud, reacts to what happens on the ground, and keeps a
 running dashboard of the trip: the exobiology manifest, notable worlds, and the
 fleet carrier's fuel, finances and route.
 
-**Live dashboard:** https://jduchock.github.io/Mister-Johns-ED-Dashboard/
+**Live dashboard:** https://claude.ai/code/artifact/3f6f1692-4fae-4757-8dee-c2b9075578c3
 
 ---
 
